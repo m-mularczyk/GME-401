@@ -9,7 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private bool _isGrounded = false;
     [SerializeField] private PlayerAnimation _playerAnimation;
+
     private SpriteRenderer _playerSpriteRenderer;
+    [SerializeField] private SpriteRenderer _swordSpriteRenderer;
 
     private Rigidbody2D _rb;
     private bool _resetJump;
@@ -56,11 +58,11 @@ public class Player : MonoBehaviour
 
         if (move > 0)
         {
-            Flip(false);
+            Flip(true);
         }
         else if (move < 0)
         {
-            Flip(true);
+            Flip(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
@@ -78,15 +80,37 @@ public class Player : MonoBehaviour
         
     }
 
-    private void Flip(bool value)
+
+    private void Flip(bool faceRight)
     {
-        _playerSpriteRenderer.flipX = value;
+        if (faceRight)
+        {
+            _playerSpriteRenderer.flipX = false;
+
+            _swordSpriteRenderer.flipX = false;
+            _swordSpriteRenderer.flipY = false;
+
+            Vector3 newPos = _swordSpriteRenderer.transform.localPosition;
+            newPos.x = 1.01f;
+            _swordSpriteRenderer.transform.localPosition = newPos;
+        }
+        else if (!faceRight)
+        {
+            _playerSpriteRenderer.flipX = true;
+
+            _swordSpriteRenderer.flipX = true;
+            _swordSpriteRenderer.flipY = true;
+
+            Vector3 newPos = _swordSpriteRenderer.transform.localPosition;
+            newPos.x = -1.01f;
+            _swordSpriteRenderer.transform.localPosition = newPos;
+        }
     }
 
     private bool IsGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.8f, 1 << 8);
-        Debug.DrawRay(transform.position, Vector2.down * 0.8f, Color.red);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1f, 1 << 8);
+        Debug.DrawRay(transform.position, Vector2.down * 1f, Color.red);
 
         if (hit.collider != null)
         {

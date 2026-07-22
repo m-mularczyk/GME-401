@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     private Animator _playerAnim;
+    [SerializeField] private Animator _swordAnim;
     
 
     void Start()
@@ -26,5 +27,6 @@ public class PlayerAnimation : MonoBehaviour
     public void Attack()
     {
         _playerAnim.SetTrigger("Attack");
+        _swordAnim.SetTrigger("SwordAnimation");
     }
 }
